@@ -14,71 +14,195 @@
 
 \section{Inleiding}%
 \label{sec:inleiding}
+De afgelopen jaren hebben deep learning-\newline architecturen voor computer vision, zoals Convolutional Neural Networks (CNN’s) en Vision Transformers, een enorme sprong gemaakt in performantie. Deze modellen worden steeds vaker ingezet in diverse sectoren, variërend van industriële kwaliteitscontrole en medische beeldanalyse tot smart cities en consultancy. Deze technologische vooruitgang heeft echter een keerzijde: de huidige generatie modellen vereist enorme hoeveelheden trainingsdata en rekenkracht om tot hoge nauwkeurigheid te komen \autocite{kaplan2020scaling}. Dit resulteert niet alleen in hoge kosten voor cloud-infrastructuur en GPU-training, maar ook in een aanzienlijke ecologische voetafdruk. Daarnaast stuiten organisaties vaak op schaalbaarheidsproblemen door de tijdrovende aard van het verzamelen en annoteren van kwalitatieve data.\\
 
-Waarover zal je bachelorproef gaan? Introduceer het thema en zorg dat volgende zaken zeker duidelijk aanwezig zijn:
+De noodzaak om deze impact te verminderen wordt ondersteund door diverse studies. Zo toont toonaangevend onderzoek van \textcite{strubell2019energy} aan dat het trainen van één enkel groot deep learning-model een CO$_2$-uitstoot kan genereren die vergelijkbaar is met de totale levensduur-emissie van vijf auto’s. Daarnaast bevestigen analyses van Google Research dat het energieverbruik van machine learning-training exponentieel toeneemt naarmate de datasetomvang en modelgrootte stijgen \autocite{patterson2021carbon}. Dit vormt een direct obstakel voor bedrijven die AI willen opschalen maar gebonden zijn aan strikte ESG-doelstellingen (Environmental, Social, and  \newline Governance).\\
 
-\begin{itemize}
-  \item kaderen thema
-  \item de doelgroep
-  \item de probleemstelling en (centrale) onderzoeksvraag
-  \item de onderzoeksdoelstelling
-\end{itemize}
+\subsection{Probleemstelling}
+Hoewel er technieken bestaan om AI-modellen te optimaliseren, zoals \textit{pruning}, \textit{distillation} en \newline \textit{quantization}, lossen deze het fundamentele probleem van de "datahonger" slechts gedeeltelijk op. Deze methoden verkleinen weliswaar het uiteindelijke model, maar vereisen vaak nog steeds het volledige, rekenintensieve trainingsproces op de complete dataset voordat optimalisatie kan plaatsvinden. Dit onderzoek vertrekt daarom vanuit de observatie dat er een inefficiëntie zit in de data zelf.\\
 
-Denk er aan: een typische bachelorproef is \textit{toegepast onderzoek}, wat betekent dat je start vanuit een concrete probleemsituatie in bedrijfscontext, een \textbf{casus}. Het is belangrijk om je onderwerp goed af te bakenen: je gaat voor die \textit{ene specifieke probleemsituatie} op zoek naar een goede oplossing, op basis van de huidige kennis in het vakgebied.
+Voordat er gewerkt kan worden naar een oplossing, analyseert deze studie het probleemdomein aan de hand van de volgende kwesties: Hoe verhoudt de datasetgrootte zich nu werkelijk tot de modelperformantie in klassieke vision-modellen? Wat is het daadwerkelijke energie- en compute-verbruik van een standaard trainingsproces? En cruciaal: hoeveel redundantie is er gemiddeld aanwezig in standaard vision-datasets zoals CIFAR-10 of ImageNet? De hypothese is dat veel data weinig toevoegt aan het leerproces, maar wel bijdraagt aan de ecologische last.\\
 
-De doelgroep moet ook concreet en duidelijk zijn, dus geen algemene of vaag gedefinieerde groepen zoals \emph{bedrijven}, \emph{developers}, \emph{Vlamingen}, enz. Je richt je in elk geval op it-professionals, een bachelorproef is geen populariserende tekst. Eén specifiek bedrijf (die te maken hebben met een concrete probleemsituatie) is dus beter dan \emph{bedrijven} in het algemeen.
+\subsection{Onderzoeksvraag en Doelstelling}
+Op basis van deze problematiek luidt de centrale onderzoeksvraag van deze bachelorproef:
 
-Formuleer duidelijk de onderzoeksvraag! De begeleiders lezen nog steeds te veel voorstellen waarin we geen onderzoeksvraag terugvinden.
+\begin{quote}
+\textit{“Hoe kan datareductie worden toegepast binnen AI-visionmodellen om vergelijkbare of betere performantie te bereiken zonder extra rekenkosten, en met een lager energie- en datasetverbruik?”}
+\end{quote}\\
 
-Schrijf ook iets over de doelstelling. Wat zie je als het concrete eindresultaat van je onderzoek, naast de uitgeschreven scriptie? Is het een proof-of-concept, een rapport met aanbevelingen, \ldots Met welk eindresultaat kan je je bachelorproef als een succes beschouwen?
-
+Om deze vraag te beantwoorden, richt dit onderzoek zich op het oplossingsdomein door datareductie te combineren met geavanceerde onzekerheidskwantificatie. Er wordt onderzocht wat de impact is van datareductie op kritieke metrieken zoals \textit{accuracy}, F1-score en \textit{inference}-tijd. Specifiek wordt gekeken met welk percentage de dataset verminderd kan worden zonder significante daling in prestaties, en of dit leidt tot een aantoonbare verlaging van trainingstijd. De onderliggende verwachting is dat AI-visionmodellen die getraind zijn met minder, maar 'informatierijkere' data, in staat zijn om beter te generaliseren dan modellen die getraind zijn op volledige datasets vol redundantie \autocite{chen2020simple}. Het uiteindelijke doel is de weg vrijmaken voor "Groene AI", waarbij robuuste computer vision mogelijk is met lagere kosten en een minimale ecologische impact.
 %---------- Stand van zaken ---------------------------------------------------
 
 \section{Literatuurstudie}%
 \label{sec:literatuurstudie}
 
-Hier beschrijf je de \emph{state-of-the-art} rondom je gekozen onderzoeksdomein, d.w.z.\ een inleidende, doorlopende tekst over het onderzoeksdomein van je bachelorproef. Je steunt daarbij heel sterk op de professionele \emph{vakliteratuur}, en niet zozeer op populariserende teksten voor een breed publiek. Wat is de huidige stand van zaken in dit domein, en wat zijn nog eventuele open vragen (die misschien de aanleiding waren tot je onderzoeksvraag!)?
+De huidige generatie computer vision-systemen dankt haar succes aan schaalvergroting. Ontwikkelaars voeden modellen met enorme hoeveelheden data en rekenkracht om de prestaties te verhogen. Dit hoofdstuk analyseert de fysieke en ecologische grenzen van deze aanpak, de beperkingen van huidige optimalisatietechnieken en de cruciale rol van onzekerheidskwantificatie in datareductie.\\
 
-Je mag de titel van deze sectie ook aanpassen (literatuurstudie, stand van zaken, enz.). Zijn er al gelijkaardige onderzoeken gevoerd? Wat concluderen ze? Wat is het verschil met jouw onderzoek?
+\subsection{De grenzen van de groei: Scaling Laws} 
+In de wereld van deep learning geldt vaak de aanname dat groter altijd beter is. \textcite{kaplan2020scaling} kwantificeerden dit fenomeen in hun \textit{scaling laws}. Zij toonden aan dat de foutmarge (\textit{loss}) van een model voorspelbaar daalt naarmate de hoeveelheid rekenkracht, de datasetgrootte en het aantal parameters toeneemt. Deze relatie volgt echter een machtswet (\textit{power-law}): om de prestaties lineair te verbeteren, moeten de middelen exponentieel groeien \autocite{kaplan2020scaling}. Dit maakt het trainingsproces op de lange termijn uiterst inefficiënt en onderhevig aan verminderde meeropbrengsten.\\
 
-Verwijs bij elke introductie van een term of bewering over het domein naar de vakliteratuur, bijvoorbeeld~\autocite{Hykes2013}! Denk zeker goed na welke werken je refereert en waarom.
+\subsection{Ecologische en economische impact} 
+Deze inefficiëntie vormt een acuut duurzaamheidsprobleem. \textcite{strubell2019energy} toonden aan dat het trainen van één enkel groot deep learning-model een CO$_2$-uitstoot kan genereren die gelijkstaat aan de volledige levenscyclus van vijf auto’s. Recenter werk bevestigt dat het energieverbruik van AI-training exponentieel stijgt naarmate de nauwkeurigheidseisen toenemen \autocite{patterson2021carbon}. Voor bedrijven botst deze infrastructuurkost met budgettaire beperkingen en ESG-doel-\newline stellingen (Environmental, Social, and Governance). Daarnaast vormt de dataverzameling een flessenhals; het handmatig annoteren van miljoenen beelden remt de schaalbaarheid van projecten aanzienlijk.\\
 
-Draag zorg voor correcte literatuurverwijzingen! Een bronvermelding hoort thuis \emph{binnen} de zin waar je je op die bron baseert, dus niet er buiten! Maak meteen een verwijzing als je gebruik maakt van een bron. Doe dit dus \emph{niet} aan het einde van een lange paragraaf. Baseer nooit teveel aansluitende tekst op eenzelfde bron.
+\subsection{Beperkingen van huidige optimalisatietechnieken} 
+De vakliteratuur zoekt naar efficiëntiewinsten, maar bestaande technieken schieten vaak tekort voor het fundamentele dataprobleem:
+\begin{itemize} 
+    \item \textbf{Model-centrisch:} Technieken zoals \textit{pruning} en \textit{quantization} verkleinen het model veelal \textit{na} de training. Dit versnelt de \textit{inference} op edge devices, maar vereist nog steeds de volledige dataset en rekenkracht voor het initiële, energie-intensieve trainingsproces.
+    \item \textbf{Data-centrisch:} Benaderingen zoals SimCLR gebruiken \textit{contrastive learning} om robuuste representaties te leren uit ongelabelde data \autocite{chen2020simple}. Hoewel dit de afhankelijkheid van menselijke labels vermindert, blijft de noodzaak voor enorme hoeveelheden ruwe data bestaan om generalisatie te garanderen. 
+\end{itemize} 
+Een effectieve oplossing vereist daarom een mechanisme dat modellen in staat stelt om aan de bron selectiever te leren van een kleinere dataset.\\
 
-Als je informatie over bronnen verzamelt in JabRef, zorg er dan voor dat alle nodige info aanwezig is om de bron terug te vinden (zoals uitvoerig besproken in de lessen Research Methods).
+\subsection{Onzekerheidskwantificatie als filter} 
+Om met minder data betrouwbare beslissingen te nemen, moet een neuraal netwerk zijn eigen beperkingen kennen. Standaard vision-modellen zijn vaak \textit{overconfident}: ze geven voorspellingen met hoge zekerheid, zelfs bij foutieve resultaten. Door onzekerheid expliciet te modelleren, kan men onderscheid maken tussen slechte data en een gebrek aan kennis. De literatuur onderscheidt twee hoofdvormen, zoals gedefinieerd in de vision-context door \textcite{kendall2017uncertainties}:
 
-% Voor literatuurverwijzingen zijn er twee belangrijke commando's:
-% \autocite{KEY} => (Auteur, jaartal) Gebruik dit als de naam van de auteur
-%   geen onderdeel is van de zin.
-% \textcite{KEY} => Auteur (jaartal)  Gebruik dit als de auteursnaam wel een
-%   functie heeft in de zin (bv. ``Uit onderzoek door Doll & Hill (1954) bleek
-%   ...'')
+\begin{enumerate} 
+    \item \textbf{Data onzekerheid (Data-ruis):} Onzekerheid die inherent is aan de data zelf, zoals bewegingsonscherpte, occlusies of sensorruis. Het verzamelen van meer data lost dit type onzekerheid niet op.
+    \item \textbf{Model onzekerheid (Model-\newline onwetendheid):} Onzekerheid die voortkomt uit een gebrek aan kennis in het model. Dit duidt op een tekort aan trainingsvoorbeelden in een specifiek domein en kan verholpen worden door meer relevante data toe te voegen \autocite{hullermeier2021aleatoric}. 
+\end{enumerate}
 
-Je mag deze sectie nog verder onderverdelen in subsecties als dit de structuur van de tekst kan verduidelijken.
+Specifieke architecturen blinken uit in het vangen van deze vormen:
+
+\subsubsection{Bayesian Neural Networks (BNN's)} 
+Waar klassieke netwerken werken met vaste gewichten, beschouwt een Bayesian Neural Network gewichten als waarschijnlijkheidsverdelingen. Dit stelt BNN's in staat om \textbf{model onzekerheid} te kwantificeren. Wanneer een BNN data ziet die sterk afwijkt van de trainingsset (\textit{out-of-distribution}), neemt de spreiding in de gewichtsdistributies toe. Dit signaal identificeert waar het model kennis tekortkomt en welke data dus essentieel is voor training \autocite{blundell2015weight, jospin2022hands}.\\
+
+\subsubsection{Interval Neural Networks (INN's)} 
+In tegenstelling tot standaard netwerken die werken met exacte puntwaarden, verwerken Interval Neural Networks data als intervallen (bereiken met een onder- en bovengrens). Door gebruik te maken van interval-rekenkunde kan het netwerk direct de inherente variabiliteit en imprecisie in de input-data modelleren. Dit maakt ze uitermate geschikt voor het vangen van \textbf{data onzekerheid}: in plaats van één enkele voorspelling, genereert het model een betrouwbaarheidsinterval dat de ruis in de data omsluit \autocite{ishibuchi1993architecture}.
+
+De combinatie van deze inzichten maakt strategische dataselectie mogelijk: door ruis (via INN-principes) en kennisleemtes (via BNN-principes) in kaart te brengen, kan een dataset gefilterd worden tot de kern die daadwerkelijk bijdraagt aan de modelperformantie.
 
 %---------- Methodologie ------------------------------------------------------
-\section{Methodologie}%
+
+\section{Methodologie}
 \label{sec:methodologie}
 
-Hier beschrijf je hoe je van plan bent het onderzoek te voeren. Welke onderzoekstechniek ga je toepassen om elk van je onderzoeksvragen te beantwoorden? Gebruik je hiervoor literatuurstudie, interviews met belanghebbenden (bv.~voor requirements-analyse), experimenten, simulaties, vergelijkende studie, risico-analyse, PoC, \ldots?
+In dit onderzoek wordt een kwantitatieve, experimentele benadering gehanteerd om de centrale hypothese te toetsen: is het mogelijk om met datareductie, gestuurd door onzekerheidskwantificatie, vergelijkbare modelprestaties te behalen met een lagere ecologische voetafdruk? De werkwijze is gestructureerd in vijf opeenvolgende fasen: dataset-preparatie, nulmeting (baseline), onzekerheidsanalyse, datareductie-experimenten en finale evaluatie.
 
-Valt je onderwerp onder één van de typische soorten bachelorproeven die besproken zijn in de lessen Research Methods (bv.\ vergelijkende studie of risico-analyse)? Zorg er dan ook voor dat we duidelijk de verschillende stappen terug vinden die we verwachten in dit soort onderzoek!
+Voor de validatie van de experimenten zijn drie medische datasets geselecteerd die variëren in complexiteit en omvang, om zo de generaliseerbaarheid van de methode te waarborgen. De eerste dataset, de \textbf{Brain MRI Dataset}, fungeert als binaire baseline en bevat ongeveer 3.000 MRI-scans gecategoriseerd als \textit{Tumor} of \textit{Geen Tumor}. Dit biedt een gecontroleerde omgeving om de basisprincipes van onzekerheidsfiltering te testen. Vervolgens wordt de complexiteit verhoogd met de \textbf{Chest Cancer Dataset}. Deze set bevat circa 700 afbeeldingen verdeeld over vier klassen (\textit{Adenocarcinoma}, \textit{Large Cell Carcinoma}, \textit{Squamous Cell Carcinoma} en \textit{Normal}). De beperkte omvang van deze set maakt het een ideale casus om te testen hoe goed de methode presteert in data-arme scenario's ("small data" regime). Tot slot wordt de schaalbaarheid getest op de \textbf{Alzheimer MRI Dataset}, die ongeveer 40.000 beelden omvat in vier dementie-stadia. Hier ligt de nadruk op het reduceren van redundantie in grote datasets om trainingstijden drastisch te verkorten.\\
 
-Vermijd onderzoekstechnieken die geen objectieve, meetbare resultaten kunnen opleveren. Enquêtes, bijvoorbeeld, zijn voor een bachelorproef informatica meestal \textbf{niet geschikt}. De antwoorden zijn eerder meningen dan feiten en in de praktijk blijkt het ook bijzonder moeilijk om voldoende respondenten te vinden. Studenten die een enquête willen voeren, hebben meestal ook geen goede definitie van de populatie, waardoor ook niet kan aangetoond worden dat eventuele resultaten representatief zijn.
+De modelontwikkeling start met het vaststellen van een \textit{baseline}. Hiervoor wordt een standaard Convolutional Neural Network (bijvoorbeeld een ResNet-18 of EfficientNet backbone) getraind op de volledige datasets. Tijdens deze fase worden niet alleen accuratesse-metrieken (Accuracy, F1-score) vastgelegd, maar ook de computationele kosten: trainingstijd, GPU-belasting en energieverbruik (geschat via tools zoals CodeCarbon). Dit vormt het referentiepunt waartegen de "Groene AI"-modellen worden afgezet. Data-augmentatie wordt hierbij toegepast om een eerlijke vergelijking met de state-of-the-art mogelijk te maken.\\
 
-Uit dit onderdeel moet duidelijk naar voor komen dat je bachelorproef ook technisch voldoen\-de diepgang zal bevatten. Het zou niet kloppen als een bachelorproef informatica ook door bv.\ een student marketing zou kunnen uitgevoerd worden.
+In de kernfase van het onderzoek wordt dit basismodel uitgebreid met mechanismen voor onzekerheidskwantificatie, specifiek gericht op het onderscheid tussen epistemische en data onzekerheid (zoals beschreven in de literatuurstudie). Door gebruik te maken van technieken zoals Monte Carlo Dropout (voor BNN-benadering) of ensemb\newline-lemethoden, wordt aan elk datapunt in de trainingsset een onzekerheidsscore toegekend. Op basis van deze scores wordt de dataset iteratief gefilterd: beelden met extreem hoge model onzekerheid (zeer informatief) worden behouden, terwijl redundante beelden (lage onzekerheid) en beelden met enkel ruis (hoge data onzekerheid) systematisch worden verwijderd. \\
 
-Je beschrijft ook al welke tools (hardware, software, diensten, \ldots) je denkt hiervoor te gebruiken of te ontwikkelen.
+Vervolgens worden nieuwe modellen getraind op deze gereduceerde subsets (bijvoorbeeld 75\%, 50\% en 25\% van de originele data). De evaluatie richt zich op de trade-off tussen performantieverlies en efficiëntiewinst. Naast de standaard verwarringsmatrices wordt specifiek geanalyseerd of het model dat getraind is op de informatierijke \newline subset beter generaliseert op de testset dan een model dat getraind is op een willekeurige subset van dezelfde grootte. Dit toont aan of de onzekerheidsfilter daadwerkelijk waarde toevoegt bovenop simpele dataverwijdering. De bevindingen worden uiteindelijk vertaald naar een advies voor duurzame modeltraining.
 
-Probeer ook een tijdschatting te maken. Hoe lang zal je met elke fase van je onderzoek bezig zijn en wat zijn de concrete \emph{deliverables} in elke fase?
+\vspace{2em}
+
+\noindent \textbf{Planning en Fasering} \\
+Onderstaand schema visualiseert de tijdsplanning. De linkerkolom toont de officiële deliverables en deadlines, terwijl de rechterkolom de corresponderende onderzoeksactiviteiten weergeeft die nodig zijn om deze mijlpalen te behalen.
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=0.6cm and 1cm,
+    every node/.style={font=\footnotesize},
+    % Stijl voor deadlines/deliverables (Links)
+    milestone/.style={rectangle, rounded corners, draw=blue!80!black, thick, fill=blue!10,
+                      text width=4.5cm, align=center, minimum height=1cm},
+    % Stijl voor onderzoeksactiviteiten (Rechts)
+    task/.style={rectangle, draw=gray!60, dashed, thick, fill=gray!5,
+                 text width=4.5cm, align=left, minimum height=1cm},
+    arrow/.style={->, thick, >=stealth}
+]
+
+% --- Kolom 1: Deadlines ---
+\node[milestone] (start) {\textbf{Start Semester 2} \\ Afspraak promotor \& Scopebepaling};
+\node[milestone, below=of start] (lit) {\textbf{Literatuurstudie \& Methodologie} \\ (Deadline: Week 3-4)};
+\node[milestone, below=of lit] (draft) {\textbf{Draft Bachelorproef} \\ (Deadline: 02/03)};
+\node[milestone, below=of draft] (talk) {\textbf{Mondelinge Toelichting} \\ Feedbackmoment};
+\node[milestone, below=of talk] (finaldraft) {\textbf{Finale Draft} \\ (Deadline: 04/05)};
+\node[milestone, below=of finaldraft] (bp) {\textbf{Indienen Definitieve BP} \\ (Deadline: 29/05)};
+\node[milestone, below=of bp] (def) {\textbf{Verdediging EP2} \\ (Juni)};
+
+% --- Kolom 2: Taken (Naast de milestones) ---
+\node[task, right=of start] (t1) {\textit{Fase 1: Setup} \\ - Dataset collectie (Kaggle) \\ - Omgeving inrichten (PyTorch/GPU)};
+\node[task, right=of lit] (t2) {\textit{Fase 2: Baseline} \\ - Trainen CNN op 100\% data \\ - Meten energie/tijd (CodeCarbon)};
+\node[task, right=of draft] (t3) {\textit{Fase 3: Experimenten} \\ - Onzekerheidsanalyse (BNN/INN) \\ - Datareductie subsets maken};
+\node[task, right=of talk] (t4) {\textit{Fase 4: Validatie} \\ - Hertrainen op subsets \\ - Vergelijkende analyse resultaten};
+\node[task, right=of finaldraft] (t5) {\textit{Fase 5: Conclusie} \\ - Verwerken feedback \\ - Schrijven discussie \& conclusie};
+
+% --- Pijlen tussen milestones ---
+\draw[arrow] (start) -- (lit);
+\draw[arrow] (lit) -- (draft);
+\draw[arrow] (draft) -- (talk);
+\draw[arrow] (talk) -- (finaldraft);
+\draw[arrow] (finaldraft) -- (bp);
+\draw[arrow] (bp) -- (def);
+
+% --- Verbindingslijnen tussen Milestone en Taak (optioneel, voor visuele link) ---
+\draw[dashed, gray] (start) -- (t1);
+\draw[dashed, gray] (lit) -- (t2);
+\draw[dashed, gray] (draft) -- (t3);
+\draw[dashed, gray] (talk) -- (t4);
+\draw[dashed, gray] (finaldraft) -- (t5);
+
+\end{tikzpicture}
+\end{center}
+
+
+
 
 %---------- Verwachte resultaten ----------------------------------------------
-\section{Verwacht resultaat, conclusie}%
+
+\subsection{Verwachte meetresultaten}
+\section{Verwachte resultaten en conclusie}%
 \label{sec:verwachte_resultaten}
 
-Hier beschrijf je welke resultaten je verwacht. Als je metingen en simulaties uitvoert, kan je hier al mock-ups maken van de grafieken samen met de verwachte conclusies. Benoem zeker al je assen en de onderdelen van de grafiek die je gaat gebruiken. Dit zorgt ervoor dat je concreet weet welk soort data je moet verzamelen en hoe je die moet meten.
+Omdat dit onderzoek zich nog in de voorstelfase bevindt, zijn er nog geen empirische meetresultaten beschikbaar. Echter, op basis van de literatuur kan een gefundeerde voorspelling worden gedaan over de relatie tussen datasetgrootte en performantie.
 
-Wat heeft de doelgroep van je onderzoek aan het resultaat? Op welke manier zorgt jouw bachelorproef voor een meerwaarde?
+\subsection{Verwachte trend: Data-efficiëntie}
+De centrale verwachting is dat modellen getraind op een slimme, onzekerheids-gefilterde subset sneller convergeren en robuuster blijven bij minder data dan modellen die willekeurige data gebruiken. Dit fenomeen wordt in de literatuur ondersteund door \textcite{sener2017active}, die aantonen dat het geometrisch selecteren van representatieve datapunten (coresets) leidt tot significant hogere nauwkeurigheid dan \textit{random sampling}, vooral in het domein van 'small data'.
 
-Hier beschrijf je wat je verwacht uit je onderzoek, met de motivatie waarom. Het is \textbf{niet} erg indien uit je onderzoek andere resultaten en conclusies vloeien dan dat je hier beschrijft: het is dan juist interessant om te onderzoeken waarom jouw hypothesen niet overeenkomen met de resultaten.
+In \autoref{fig:mockup_results} is deze verwachting gevisualiseerd.
+\begin{itemize}
+    \item De \textbf{Rode lijn (Baseline)} toont de verwachte prestaties van standaard training: deze curve zakt naar verwachting snel in zodra de dataset kleiner wordt, conform de observaties bij standaard CNN-training.
+    \item De \textbf{Blauwe lijn (Oplossing)} toont de verwachte prestaties van de \textit{Uncertainty-Aware} methode. De hypothese is dat deze lijn langer horizontaal blijft, omdat de 'informatierijke' data (hoge model onzekerheid) behouden blijft, zoals beschreven in Active Learning theorieën \autocite{settles2009active}.
+\end{itemize}
 
+% --- START MOCK-UP GRAFIEK ---
+\begin{figure}[h]
+\centering
+% \resizebox schaalt de inhoud naar de breedte van de kolom (\linewidth)
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}
+    \begin{axis}[
+        width=10cm, height=6cm, % Interne grootte, resizebox schaalt dit later
+        xlabel={Percentage van de Dataset (\%)},
+        ylabel={Model Accuracy (Verwacht)},
+        xmin=0, xmax=100,
+        ymin=50, ymax=100,
+        xtick={20,40,60,80,100},
+        ytick={50,60,70,80,90,100},
+        legend style={at={(0.5,-0.25)}, anchor=north, nodes={scale=0.8, transform shape}}, % Legende onder de grafiek voor ruimte
+        grid=major,
+        grid style={dashed,gray!30}
+    ]
+    
+    % Lijn 1: Smart Selection
+    \addplot[color=blue, ultra thick, smooth] coordinates {
+        (10, 75) (25, 88) (50, 93) (75, 95) (100, 96)
+    };
+    \addlegendentry{Smart Selection \autocite{sener2017active}}
+    
+    % Lijn 2: Random Baseline
+    \addplot[color=red, thick, dashed, smooth] coordinates {
+        (10, 50) (25, 65) (50, 82) (75, 90) (100, 95)
+    };
+    \addlegendentry{Random Baseline}
+    
+    \end{axis}
+\end{tikzpicture}
+} % Einde resizebox
+\caption{Mock-up resultaten: De 'Smart Selection' methode behoudt naar verwachting hogere nauwkeurigheid.}
+\label{fig:mockup_results}
+\end{figure}
+% --- EINDE MOCK-UP GRAFIEK ---
+
+\subsection{Verwachte impact voor de doelgroep}
+Indien de bovenstaande trend in de experimentele fase wordt bevestigd, biedt dit onderzoek concrete meerwaarde op drie vlakken:
+\begin{enumerate}
+    \item \textbf{Duurzaamheid:} Een reductie van de datasetgrootte met 30-40\% leidt tot een directe lineaire afname in GPU-uren en energieverbruik, wat een antwoord biedt op de ecologische zorgen geuit door \textcite{strubell2019energy}.
+    \item \textbf{Snelheid:} Kortere trainingstijden maken snellere iteraties mogelijk voor developers.
+    \item \textbf{Datakwaliteit:} Door de focus te verleggen van kwantiteit naar kwaliteit, krijgen organisaties inzicht in welke data daadwerkelijk waarde toevoegt.
+\end{enumerate}
+
+\subsection{Voorlopige Conclusie}
+De verwachting is dat "meer data" niet per definitie gelijkstaat aan "betere prestaties". De bachelorproef zal trachten aan te tonen dat vision-datasets veel redundantie bevatten. Mocht uit de experimenten blijken dat de overhead van het berekenen van onzekerheid groter is dan de winst in trainingstijd, dan zal de conclusie zich richten op het vinden van het exacte "omslagpunt" waar datareductie economisch en ecologisch rendabel wordt.

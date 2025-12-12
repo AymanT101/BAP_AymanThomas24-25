@@ -1,31 +1,151 @@
-% Encoding: UTF-8
+% ============================================================
+% 1. PROBLEEMSTELLING: ECOLOGIE & SCALING LAWS
+% ============================================================
 
-@Article{SabiEtAl2016,
-  author       = {Sabi, Humphrey M. and Uzoka, Faith-Michael E. and Langmia, Kehbuma and Njeh, Felix M.},
-  title        = {Conceptualizing a model for adoption of cloud computing in education},
-  journaltitle = {International Journal of Information Management},
-  year         = {2016},
-  volume       = {36},
-  number       = {2},
-  pages        = {183--191},
-  doi          = {10.1016/j.ijinfomgt.2015.11.010},
-  url          = {http://www.sciencedirect.com/science/article/pii/S0268401215001115},
+@inproceedings{strubell2019energy,
+  title     = {Energy and Policy Considerations for Deep Learning in {NLP}},
+  author    = {Strubell, Emma and Ganesh, Ananya and McCallum, Andrew},
+  booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
+  pages     = {3645--3650},
+  year      = {2019},
+  publisher = {Association for Computational Linguistics},
+  url       = {https://aclanthology.org/P19-1355/},
+  note      = {De basispaper over CO2-uitstoot van AI training}
 }
 
-@Online{LewisFowler2014,
-  author    = {Lewis, James and Fowler, Martin},
-  title     = {Microservices: a definition of this new architectural term},
-  date      = {2014-03-25},
-  url       = {http://martinfowler.com/articles/microservices.html},
-  urldate   = {2016-09-01},
+@article{kaplan2020scaling,
+  title     = {Scaling Laws for Neural Language Models},
+  author    = {Kaplan, Jared and McCandlish, Sam and Henighan, Tom and Brown, Tom B. and Chess, Benjamin and Child, Rewon and Gray, Scott and Radford, Alec and Wu, Jeffrey and Amodei, Dario},
+  journal   = {arXiv preprint arXiv:2001.08361},
+  year      = {2020},
+  url       = {https://arxiv.org/abs/2001.08361},
+  note      = {Bewijs dat lineaire performantie-winst exponentiële data vereist}
 }
 
-@Online{Hykes2013,
-  author    = {Solomon Hykes},
-  title     = {The future of Linux Containers (PyCon 2013)},
-  date      = {2013-03-21},
-  url       = {https://www.youtube.com/watch?v=wW9CAH9nSLs},
-  urldate   = {2016-09-01},
+@article{patterson2021carbon,
+  title     = {Carbon Emissions and Large Neural Network Training},
+  author    = {Patterson, David and Gonzalez, Joseph and Le, Quoc and Liang, Chen and Munguia, Lluis-Miquel and Rothchild, Daniel and So, David and Texier, Maud and Dean, Jeff},
+  journal   = {arXiv preprint arXiv:2104.10350},
+  year      = {2021},
+  url       = {https://arxiv.org/abs/2104.10350},
+  note      = {Analyse van Google over energieverbruik}
 }
 
-@Comment{jabref-meta: databaseType:biblatex;}
+% ============================================================
+% 2. OPLOSSINGSDOMEIN: DATA EFFICIËNTIE (SimCLR etc.)
+% ============================================================
+
+@inproceedings{chen2020simple,
+  title     = {A Simple Framework for Contrastive Learning of Visual Representations},
+  author    = {Chen, Ting and Kornblith, Simon and Norouzi, Mohammad and Hinton, Geoffrey},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  pages     = {1597--1607},
+  year      = {2020},
+  organization = {PMLR},
+  url       = {https://proceedings.mlr.press/v119/chen20j.html},
+  note      = {Basis voor informatierijke data representaties}
+}
+
+% ============================================================
+% 3. THEORIE: ONZEKERHEID (BNN & INN)
+% ============================================================
+
+@inproceedings{kendall2017uncertainties,
+  title     = {What uncertainties do we need in bayesian deep learning for computer vision?},
+  author    = {Kendall, Alex and Gal, Yarin},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {30},
+  year      = {2017},
+  url       = {https://arxiv.org/abs/1703.04977},
+  note      = {Definieert Aleatoric vs Epistemic Uncertainty in Vision}
+}
+
+@inproceedings{blundell2015weight,
+  title     = {Weight Uncertainty in Neural Network},
+  author    = {Blundell, Charles and Cornebise, Julien and Kavukcuoglu, Koray and Wierstra, Daan},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  pages     = {1613--1622},
+  year      = {2015},
+  organization = {PMLR},
+  url       = {https://proceedings.mlr.press/v37/blundell15.html},
+  note      = {Bayes by Backprop (BNN basis)}
+}
+
+@inproceedings{ardizzone2018analyzing,
+  title     = {Analyzing Inverse Problems with Invertible Neural Networks},
+  author    = {Ardizzone, Lynton and Kruse, Jakob and Wirkert, Sebastian and Rahner, Daniel and Pellegrini, Eric W and Klessen, Ralf S and Maier-Hein, Lena and Rother, Carsten and K{\"o}the, Ullrich},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2019},
+  url       = {https://arxiv.org/abs/1808.04730},
+  note      = {Invertible Neural Networks (INN) basis}
+}
+
+@article{jospin2022hands,
+  title     = {Hands-on Bayesian Neural Networks—A Tutorial for Deep Learning Users},
+  author    = {Jospin, Laurent Valentin and Laga, Hamid and Boussaid, Farid and Buntine, Wray and Bennamoun, Mohammed},
+  journal   = {ACM Computing Surveys (CSUR)},
+  volume    = {54},
+  number    = {6},
+  pages     = {1--37},
+  year      = {2022},
+  publisher = {ACM},
+  url       = {https://arxiv.org/abs/2011.12288},
+  note      = {Uitgebreide tutorial over BNNs}
+}
+
+@article{hullermeier2021aleatoric,
+  title     = {Aleatoric and Epistemic Uncertainty in Machine Learning: An Introduction to Concepts and Methods},
+  author    = {H{\"u}llermeier, Eyke and Waegeman, Willem},
+  journal   = {Machine Learning},
+  volume    = {110},
+  pages     = {457--506},
+  year      = {2021},
+  publisher = {Springer},
+  url       = {https://link.springer.com/article/10.1007/s10994-021-05946-3},
+  note      = {Theoretische achtergrond onzekerheid}
+}
+@article{ishibuchi1993architecture,
+  title     = {Architecture of neural networks with interval weights and its application to fuzzy regression analysis},
+  author    = {Ishibuchi, Hisao and Tanaka, Hideo},
+  journal   = {Fuzzy Sets and Systems},
+  volume    = {57},
+  number    = {1},
+  pages     = {27--39},
+  year      = {1993},
+  publisher = {Elsevier},
+  doi       = {10.1016/0165-0114(93)90113-D},
+  url       = {https://doi.org/10.1016/0165-0114(93)90113-D},
+  note      = {Fundamenteel werk over Interval Neural Networks}
+}
+
+% ============================================================
+% 4. STAND VAN ZAKEN: ACTIVE LEARNING & CORESETS
+% ============================================================
+
+@techreport{settles2009active,
+  title     = {Active Learning Literature Survey},
+  author    = {Settles, Burr},
+  year      = {2009},
+  institution = {University of Wisconsin-Madison Department of Computer Sciences},
+  url       = {https://burrsettles.com/pub/settles.activelearning.pdf},
+  note      = {De standaard survey voor Active Learning}
+}
+
+@inproceedings{sener2017active,
+  title     = {Active Learning for Convolutional Neural Networks: A Core-Set Approach},
+  author    = {Sener, Ozan and Savarese, Silvio},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2018},
+  url       = {https://arxiv.org/abs/1708.00489},
+  note      = {Core-set selection methode}
+}
+
+@inproceedings{mirzasoleiman2020coresets,
+  title     = {Coresets for Data-efficient Training of Machine Learning Models},
+  author    = {Mirzasoleiman, Baharan and Bilmes, Jeff and Leskovec, Jure},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  pages     = {6950--6960},
+  year      = {2020},
+  organization = {PMLR},
+  url       = {https://proceedings.mlr.press/v119/mirzasoleiman20a.html}
+}

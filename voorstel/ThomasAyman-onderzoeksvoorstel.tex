@@ -1,0 +1,75 @@
+%==============================================================================
+% Sjabloon onderzoeksvoorstel bachproef
+%==============================================================================
+% Gebaseerd op document class `hogent-article'
+% zie <https://github.com/HoGentTIN/latex-hogent-article>
+% !TEX program = xelatex
+
+% Voor een voorstel in het Engels: voeg de documentclass-optie [english] toe.
+% Let op: kan enkel na toestemming van de bachelorproefcoördinator!
+\documentclass{hogent-article}
+\usepackage{pgfgantt}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+
+% Invoegen bibliografiebestand
+\addbibresource{voorstel.bib}
+
+% Informatie over de opleiding, het vak en soort opdracht
+\studyprogramme{Professionele bachelor toegepaste informatica}
+\course{Bachelorproef}
+\assignmenttype{Onderzoeksvoorstel}
+% Voor een voorstel in het Engels, haal de volgende 3 regels uit commentaar
+% \studyprogramme{Bachelor of applied information technology}
+% \course{Bachelor thesis}
+% \assignmenttype{Research proposal}
+
+\academicyear{2024-2025} % TODO: pas het academiejaar aan
+
+% TODO: Werktitel
+\title{Hoe kan datareductie worden toegepast binnen AI-visionmodellen om vergelijkbare of betere performantie te bereiken zonder extra rekenkosten, en met een lager energie- en datasetverbruik?}
+
+% TODO: Studentnaam en emailadres invullen
+\author{Ayman Thomas}
+\email{ayman.thomas@student.hogent.be}
+
+% TODO: Medestudent
+% Gaat het om een bachelorproef in samenwerking met een student in een andere
+% opleiding? Geef dan de naam en emailadres hier
+% \author{Yasmine Alaoui (naam opleiding)}
+% \email{yasmine.alaoui@student.hogent.be}
+
+% TODO: Geef de co-promotor op
+\supervisor[Co-promotor]{Arshia Shariatmadar (\href{mailto:arshia@r3al.ai}{arshia@r3al.ai})}
+
+% Binnen welke specialisatierichting uit 3TI situeert dit onderzoek zich?
+% Kies uit deze lijst:
+%
+% - Mobile \& Enterprise development
+% - AI \& Data Engineering
+% - Functional \& Business Analysis
+% - System \& Network Administrator
+% - Mainframe Expert
+% - Als het onderzoek niet past binnen een van deze domeinen specifieer je deze
+%   zelf
+%
+\specialisation{AI & Data Engineering}
+\keywords{Deep Learning, AI , INN/BNN}
+
+\begin{document}
+
+\begin{abstract}
+De exponentiële groei van Deep Learning binnen computer vision levert modellen op met ongeziene prestaties, maar deze vooruitgang botst op harde fysieke en ecologische grenzen. Huidige trainingsmethoden vereisen enorme hoeveelheden geannoteerde data en rekenkracht, wat resulteert in hoge operationele kosten en een aanzienlijke ecologische voetafdruk. Dit onderzoeksvoorstel evalueert datareductie als noodzakelijke stap naar duurzame AI ("Groene AI"). De centrale hypothese stelt dat vision-datasets een hoge mate van redundantie bevatten en dat modellen effectief getraind kunnen worden op een strategische subset van de data zonder significant verlies aan nauwkeurigheid.
+
+Het doel van deze studie is het valideren van een selectiemechanisme gebaseerd op onzekerheidskwantificatie. Door onderscheid te maken tussen  model onzekerheid (kennisleemtes) en data onzekerheid (ruis), kunnen de meest informatierijke datapunten geïdentificeerd worden. De methodologie omvat een kwantitatieve vergelijkende studie waarin de performantie van Convolutional Neural Networks (CNN's) op medische datasets wordt afgezet tegen varianten getraind op subsets die via onzekerheids-metrics gefilterd zijn. Hierbij wordt de impact op kritieke metrieken zoals accuratesse, trainingstijd en energieverbruik gemeten. De verwachte resultaten beogen aan te tonen dat een verschuiving van kwantiteit naar datakwaliteit leidt tot modellen die niet alleen efficiënter, maar ook breder inzetbaar zijn in resource-beperkte omgevingen.
+\end{abstract}
+
+\tableofcontents
+
+% De hoofdtekst van het voorstel zit in een apart bestand, zodat het makkelijk
+% kan opgenomen worden in de bijlagen van de bachelorproef zelf.
+\input{voorstel-inhoud}
+
+\printbibliography[heading=bibintoc]
+
+\end{document}
