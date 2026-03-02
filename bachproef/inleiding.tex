@@ -5,46 +5,47 @@
 \chapter{\IfLanguageName{dutch}{Inleiding}{Introduction}}%
 \label{ch:inleiding}
 
-De inleiding moet de lezer net genoeg informatie verschaffen om het onderwerp te begrijpen en in te zien waarom de onderzoeksvraag de moeite waard is om te onderzoeken. In de inleiding ga je literatuurverwijzingen beperken, zodat de tekst vlot leesbaar blijft. Je kan de inleiding verder onderverdelen in secties als dit de tekst verduidelijkt. Zaken die aan bod kunnen komen in de inleiding~\autocite{Pollefliet2011}:
-
-\begin{itemize}
-  \item context, achtergrond
-  \item afbakenen van het onderwerp
-  \item verantwoording van het onderwerp, methodologie
-  \item probleemstelling
-  \item onderzoeksdoelstelling
-  \item onderzoeksvraag
-  \item \ldots
-\end{itemize}
+De afgelopen jaren hebben deep learning-architecturen voor computer vision een enorme sprong gemaakt in performantie. Deze modellen worden steeds vaker ingezet in diverse sectoren, zoals medische beeldanalyse en industriële kwaliteitscontrole. Deze technologische vooruitgang heeft echter een keerzijde: de huidige generatie modellen vereist enorme hoeveelheden trainingsdata en rekenkracht. Dit resulteert niet alleen in hoge kosten voor cloud-infrastructuur en GPU-training, maar leidt ook tot een aanzienlijke ecologische voetafdruk. Daarnaast vormt het verzamelen en annoteren van kwalitatieve data een grote flessenhals voor de schaalbaarheid van projecten.
 
 \section{\IfLanguageName{dutch}{Probleemstelling}{Problem Statement}}%
 \label{sec:probleemstelling}
 
-Uit je probleemstelling moet duidelijk zijn dat je onderzoek een meerwaarde heeft voor een concrete doelgroep. De doelgroep moet goed gedefinieerd en afgelijnd zijn. Doelgroepen als ``bedrijven,'' ``KMO's'', systeembeheerders, enz.~zijn nog te vaag. Als je een lijstje kan maken van de personen/organisaties die een meerwaarde zullen vinden in deze bachelorproef (dit is eigenlijk je steekproefkader), dan is dat een indicatie dat de doelgroep goed gedefinieerd is. Dit kan een enkel bedrijf zijn of zelfs één persoon (je co-promotor/opdrachtgever).
+Hoewel er technieken bestaan om AI-modellen te optimaliseren, zoals pruning, distillation en quantization, lossen deze het fundamentele probleem van de "datahonger" slechts gedeeltelijk op. Deze methoden verkleinen weliswaar het uiteindelijke model, maar vereisen vaak nog steeds het volledige, rekenintensieve trainingsproces op de complete dataset voordat optimalisatie kan plaatsvinden. Dit onderzoek vertrekt daarom vanuit de observatie dat er een inefficiëntie zit in de data zelf. 
+
+Voordat er gewerkt kan worden naar een oplossing, analyseert deze studie het probleemdomein aan de hand van de volgende kwesties: Hoe verhoudt de datasetgrootte zich nu werkelijk tot de modelperformantie in klassieke vision-modellen? Wat is het daadwerkelijke energie- en compute-verbruik van een standaard trainingsproces? En cruciaal: hoeveel redundantie is er gemiddeld aanwezig in standaard vision-datasets zoals CIFAR-10 of ImageNet? 
+
+De hypothese is dat veel data weinig toevoegt aan het leerproces, maar wel bijdraagt aan de ecologische last. Dit onderzoek biedt daarmee een concrete meerwaarde voor machine learning engineers en AI-ontwikkelaars die zich specifiek bezighouden met het ontwerpen, trainen en optimaliseren van computer vision-modellen. Daarnaast is het direct relevant voor data engineers en gespecialiseerde AI-bedrijven (zoals r3al.ai) die dergelijke vision-toepassingen industrieel willen opschalen. In de praktijk botsen zij namelijk vaak op de grenzen van hun infrastructuur en zijn ze gebonden aan strikte budgettaire beperkingen qua rekenkracht (dure GPU-uren) en toenemende duurzaamheidseisen vanuit actuele ESG-doelstellingen (Environmental, Social, and Governance).
 
 \section{\IfLanguageName{dutch}{Onderzoeksvraag}{Research question}}%
 \label{sec:onderzoeksvraag}
 
-Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
+Op basis van deze problematiek luidt de centrale onderzoeksvraag van deze bachelorproef: 
+
+\begin{quote}
+Hoe kan datareductie worden toegepast binnen AI-visionmodellen om vergelijkbare of betere performantie te bereiken zonder extra rekenkosten, en met een lager energie- en datasetverbruik?
+\end{quote}
+
+Deze vraag kan verder worden gespecificeerd in de volgende deelvragen:
+\begin{itemize}
+    \item Hoeveel redundantie is er gemiddeld aanwezig in standaard vision-datasets?
+    \item Met welk percentage kan de dataset verminderd worden zonder significante daling in prestaties?
+    \item Leidt deze gerichte reductie tot een aantoonbare verlaging van de trainingstijd en het energieverbruik?
+\end{itemize}
 
 \section{\IfLanguageName{dutch}{Onderzoeksdoelstelling}{Research objective}}%
 \label{sec:onderzoeksdoelstelling}
 
-Wat is het beoogde resultaat van je bachelorproef? Wat zijn de criteria voor succes? Beschrijf die zo concreet mogelijk. Gaat het bv.\ om een proof-of-concept, een prototype, een verslag met aanbevelingen, een vergelijkende studie, enz.
+Om deze onderzoeksvraag te beantwoorden, richt dit onderzoek zich op het oplossingsdomein door datareductie te combineren met geavanceerde onzekerheidskwantificatie. Er wordt onderzocht wat de impact is van datareductie op kritieke metrieken zoals accuracy, F1-score en inference-tijd. 
+
+De onderliggende verwachting is dat AI-visionmodellen die getraind zijn met minder, maar 'informatierijkere' data, in staat zijn om beter te generaliseren dan modellen die getraind zijn op volledige datasets vol redundantie. Het uiteindelijke doel is de weg vrijmaken voor "Groene AI", waarbij robuuste computer vision mogelijk is met lagere kosten en een minimale ecologische impact.
 
 \section{\IfLanguageName{dutch}{Opzet van deze bachelorproef}{Structure of this bachelor thesis}}%
 \label{sec:opzet-bachelorproef}
 
-% Het is gebruikelijk aan het einde van de inleiding een overzicht te
-% geven van de opbouw van de rest van de tekst. Deze sectie bevat al een aanzet
-% die je kan aanvullen/aanpassen in functie van je eigen tekst.
-
 De rest van deze bachelorproef is als volgt opgebouwd:
 
-In Hoofdstuk~\ref{ch:stand-van-zaken} wordt een overzicht gegeven van de stand van zaken binnen het onderzoeksdomein, op basis van een literatuurstudie.
+In Hoofdstuk~\ref{ch:stand-van-zaken} wordt een overzicht gegeven van de stand van zaken binnen het onderzoeksdomein, op basis van een literatuurstudie naar scaling laws, ecologische impact en onzekerheidskwantificatie.
 
-In Hoofdstuk~\ref{ch:methodologie} wordt de methodologie toegelicht en worden de gebruikte onderzoekstechnieken besproken om een antwoord te kunnen formuleren op de onderzoeksvragen.
+In Hoofdstuk~\ref{ch:methodologie} wordt de methodologie toegelicht en worden de experimentele opzet, de gebruikte datasets en de implementatie van de onzekerheidsfilters besproken.
 
-% TODO: Vul hier aan voor je eigen hoofstukken, één of twee zinnen per hoofdstuk
-
-In Hoofdstuk~\ref{ch:conclusie}, tenslotte, wordt de conclusie gegeven en een antwoord geformuleerd op de onderzoeksvragen. Daarbij wordt ook een aanzet gegeven voor toekomstig onderzoek binnen dit domein.
+In Hoofdstuk~\ref{ch:conclusie}, ten slotte, worden de (verwachte) resultaten en de \textit{trade-off} tussen modelperformantie en efficiëntiewinst geanalyseerd, waarna de algemene conclusie wordt gegeven en een antwoord wordt geformuleerd op de onderzoeksvragen. Daarbij wordt ook een aanzet gegeven voor toekomstig onderzoek binnen dit domein en wordt een concreet advies geformuleerd voor duurzame modeltraining.

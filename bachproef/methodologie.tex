@@ -5,26 +5,110 @@
 \chapter{\IfLanguageName{dutch}{Methodologie}{Methodology}}%
 \label{ch:methodologie}
 
-%% TODO: In dit hoofstuk geef je een korte toelichting over hoe je te werk bent
-%% gegaan. Verdeel je onderzoek in grote fasen, en licht in elke fase toe wat
-%% de doelstelling was, welke deliverables daar uit gekomen zijn, en welke
-%% onderzoeksmethoden je daarbij toegepast hebt. Verantwoord waarom je
-%% op deze manier te werk gegaan bent.
-%% 
-%% Voorbeelden van zulke fasen zijn: literatuurstudie, opstellen van een
-%% requirements-analyse, opstellen long-list (bij vergelijkende studie),
-%% selectie van geschikte tools (bij vergelijkende studie, "short-list"),
-%% opzetten testopstelling/PoC, uitvoeren testen en verzamelen
-%% van resultaten, analyse van resultaten, ...
-%%
-%% !!!!! LET OP !!!!!
-%%
-%% Het is uitdrukkelijk NIET de bedoeling dat je het grootste deel van de corpus
-%% van je bachelorproef in dit hoofstuk verwerkt! Dit hoofdstuk is eerder een
-%% kort overzicht van je plan van aanpak.
-%%
-%% Maak voor elke fase (behalve het literatuuronderzoek) een NIEUW HOOFDSTUK aan
-%% en geef het een gepaste titel.
+Om een antwoord te formuleren op de centrale onderzoeksvraag, hanteert deze bachelorproef een kwantitatieve, experimentele onderzoeksmethode. Het doel is om empirisch te toetsen of datareductie, gestuurd door onzekerheidskwantificatie, kan leiden tot vergelijkbare modelprestaties met een lagere ecologische voetafdruk. 
 
-\lipsum[21-25]
+Er is specifiek gekozen voor een gecontroleerde, experimentele opzet omdat de impact van datareductie objectief meetbaar is via harde metrieken zoals modelaccuratesse (via multi-class F1-scores), inference-tijd en direct energieverbruik (via CodeCarbon). Deze aanpak garandeert dat de resultaten kwantificeerbaar, reproduceerbaar en direct vergelijkbaar zijn met bestaande state-of-the-art methoden.
 
+\section{Onderzoeksopzet en Fasering}
+\label{sec:onderzoeksopzet}
+Het onderzoek is gestructureerd in vijf opeenvolgende fasen. Hieronder wordt voor elke fase kort toegelicht wat de doelstelling is, welke methoden worden toegepast en wat de verwachte deliverables zijn. De daadwerkelijke uitwerking van de experimentele opzet wordt in de daaropvolgende secties in detail besproken.
+
+\subsection{Fase 1: Setup en Dataset Selectie}
+\textbf{Doelstelling:} Het inrichten van een schaalbare ontwikkelomgeving en het selecteren van geschikte testdata. \\
+\textbf{Methode:} Literatuur- en bronnenonderzoek (Kaggle) voor het verzamelen van drie variërende medische datasets (Alzheimer MRI, Chest Cancer, Blood Cell) die verschillen in complexiteit en omvang. Inrichting van de experimentele omgeving in Python met PyTorch en GPU-acceleratie via Kaggle. \\
+\textbf{Deliverable:} Een geconfigureerde testomgeving en drie geprepareerde, gestandaardiseerde datasets klaar voor modeltraining.
+
+\subsection{Fase 2: Nulmeting (Baseline)}
+\textbf{Doelstelling:} Het vaststellen van een objectief referentiepunt voor de huidige state-of-the-art om latere efficiëntiewinsten tegen af te zetten. \\
+\textbf{Methode:} Het trainen van diverse modelarchitecturen (traditionele CNNs, ResNet18 en YOLOv8) op 100\% van de beschikbare data voor elke dataset. Parallel hieraan worden het exacte energieverbruik en de trainingstijd gemeten via de tool CodeCarbon. \\
+\textbf{Deliverable:} Baseline performantiemetrieken (Accuracy, Macro/Weighted F1-score) en baseline ecologische metrieken (kWh, $CO_2$-equivalent) per modelarchitectuur.
+
+\subsection{Fase 3: Experimenten via 'Smart Selection'}
+\textbf{Doelstelling:} Het kwantificeren van data- en model-onzekerheid om redundante data te identificeren en te elimineren. \\
+\textbf{Methode:} Implementatie van Bayesiaanse benaderingen, zoals Monte Carlo Dropout, en Interval Neural Network-principes om aan elk datapunt in de trainingsset een onzekerheidsscore toe te kennen. Op basis van deze scores wordt de data iteratief gefilterd om nieuwe, kleinere subsets (bijv. 75\%, 50\%, 25\%) te genereren. \\
+\textbf{Deliverable:} Een operationeel filteralgoritme ('Smart Selection') en de gereduceerde, informatierijke datasets.
+
+\subsection{Fase 4: Validatie en Vergelijkende Analyse}
+\textbf{Doelstelling:} Valideren of de modellen, getraind op de gereduceerde subsets, hun generalisatiekracht behouden ten opzichte van willekeurig gereduceerde data, ongeacht de onderliggende architectuur. \\
+\textbf{Methode:} Het vanaf nul trainen van de geselecteerde modellen (CNN, ResNet18, YOLOv8) op de gegenereerde subsets en op vergelijkbare \textit{randomly sampled} subsets (de Random Baseline). Vergelijkende statistische analyse van testaccuratesse en berekening van de ecologische besparing. \\
+\textbf{Deliverable:} Kwantitatieve validatieresultaten, verwarringsmatrices en energiebesparingsrapporten.
+
+\subsection{Fase 5: Synthese en Aanbevelingen}
+\textbf{Doelstelling:} Het formuleren van conclusies en best practices voor de industrie. \\
+\textbf{Methode:} Het aggregeren van alle experimentele data om het omslagpunt tussen datareductie, energiebesparing en performantiebehoud te bepalen. \\
+\textbf{Deliverable:} Het uiteindelijke besluit van deze bachelorproef, inclusief een raamwerk voor "Groene AI".
+
+
+%%=============================================================================
+%% HIERONDER START DE EIGENLIJKE UITVOERING BINNEN DIT HOOFDSTUK
+%%=============================================================================
+
+\section{Setup en Datapreparatie}
+\label{sec:setup}
+In deze sectie wordt de voorbereiding van de experimentele omgeving en de selectie van de datasets beschreven. Dit vormt het fundament waarop alle verdere experimenten worden uitgevoerd.
+
+\subsection{Dataset Selectie}
+Voor de experimenten zullen drie medische datasets worden gebruikt, afkomstig van het platform Kaggle. Deze zijn specifiek geselecteerd op basis van hun diversiteit in medische context en variërende bestandsgrootte. Alle drie de datasets betreffen multi-class classificatieproblemen met vier klassen:
+
+\begin{itemize}
+    \item \textbf{Alzheimer MRI Dataset:} Deze dataset bevat MRI-scans van de hersenen, gericht op het detecteren van de mate van dementie. De dataset is omvangrijk (ongeveer 40.000 beelden, een mix van originele en geaugmenteerde data) en is onderverdeeld in vier klassen: \textit{Mild Demented, Moderate Demented, Non Demented,} en \textit{Very Mild Demented}.
+    
+    \item \textbf{Chest Cancer (CT-Scan) Dataset:} Deze dataset bevat CT-scans (in JPG- en PNG-formaat) voor de detectie en classificatie van borstkanker. De data is op voorhand gestructureerd in een trainingsset (70\%), testset (20\%) en validatieset (10\%). Er wordt onderscheid gemaakt tussen drie kankertypes (\textit{Adenocarcinoma, Large cell carcinoma, Squamous cell carcinoma}) en één controleklasse met gezonde weefsels (\textit{Normal}).
+    
+    \item \textbf{Blood Cell Dataset:} Deze dataset is gericht op de automatische identificatie van bloedcel-subtypes voor de diagnose van bloedziekten. De set bevat 12.500 geaugmenteerde JPEG-afbeeldingen (ongeveer 3.000 per klasse) en 410 originele beelden. De vier aanwezige celtypen zijn: \textit{Eosinophil, Lymphocyte, Monocyte,} en \textit{Neutrophil}.
+\end{itemize}
+
+\subsection{Data Pre-processing}
+Alle beelden zullen worden gestandaardiseerd om een eerlijke vergelijking mogelijk te maken. De geplande pre-processing stappen omvatten onder andere normalisatie van pixelwaarden en resizing naar een uniforme resolutie die aansluit bij de vereisten van de gekozen modelarchitecturen (zoals 224x224 voor ResNet18). Aangezien de Chest Cancer dataset reeds is opgesplitst, zullen de Alzheimer en Blood Cell datasets via een vergelijkbare verhouding (bijv. 70/10/20) worden gepartitioneerd.
+
+\subsection{Experimentele Omgeving}
+De modellen zullen worden geïmplementeerd in Python met behulp van het PyTorch-framework (en de bijbehorende bibliotheken voor YOLO). De experimenten worden in hun geheel uitgevoerd binnen de notebooks van Kaggle. Om de trainingstijden zo optimaal mogelijk te houden bij het trainen van de zwaardere architecturen, zal er telkens gebruik worden gemaakt van de krachtigste beschikbare GPU-accelerator op het platform (zoals de NVIDIA Tesla P100 of de Dual Tesla T4 configuratie). Voor het nauwkeurig meten van het energieverbruik en de ecologische voetafdruk wordt de Python-library CodeCarbon naadloos geïntegreerd in de trainingsloops.
+
+
+\section{Baseline Analyse en Nulmeting}
+\label{sec:baseline}
+Voordat de reductie-algoritmen worden toegepast, zal per dataset een nulmeting worden uitgevoerd op 100\% van de beschikbare data. Dit is cruciaal om de latere experimenten te kunnen evalueren.
+
+\subsection{Modelarchitecturen}
+Om te valideren of de datareductiemethode robuust is en onafhankelijk werkt van de complexiteit van het model, worden de experimenten uitgevoerd over een divers spectrum aan architecturen:
+\begin{itemize}
+    \item \textbf{Traditioneel CNN:} Een basis \textit{Convolutional Neural Network} opgebouwd vanaf nul, dienend als weging voor relatief eenvoudige en lichte modellen.
+    \item \textbf{ResNet18:} Een dieper, wijdverbreid pre-trained model dat gebruikmaakt van \textit{residual connections}. Dit fungeert als de industriestandaard benchmark.
+    \item \textbf{YOLOv8 (Classification):} Een hypermodern, state-of-the-art model dat primair bekend staat om zijn snelheid en efficiëntie, hier toegepast in classificatiemodus.
+\end{itemize}
+Door deze drie iteraties parallel te testen, kan worden geobserveerd hoe verschillende netwerkdieptes en -structuren reageren op de gereduceerde datasets.
+
+\subsection{Verwachte Metrieken}
+Aangezien de geselecteerde medische datasets uit meerdere klassen bestaan (multi-class classificatie), volstaat de standaard F1-score niet om de modelperformantie objectief te evalueren. In plaats daarvan zal er gebruik worden gemaakt van de \textbf{Macro F1-score} of de \textbf{Weighted F1-score}, om een accuraat en gebalanceerd beeld te krijgen.
+
+[PLACEHOLDER: Na de daadwerkelijke uitvoering van de experimenten zullen hier de baseline resultaten worden gerapporteerd. Dit zal tabellen bevatten met de \textit{accuracy}, de \textit{Macro F1-scores}, de trainingstijd en het energieverbruik in kWh en $CO_2$eq gemeten via CodeCarbon, uitgesplitst per model (CNN, ResNet18, YOLOv8).]
+
+
+\section{Implementatie van Smart Selection}
+\label{sec:smart-selection-implementatie}
+Dit onderzoek stelt een 'Smart Selection' methode voor om de datasets te reduceren. Het doel is om datapunten met een lage informatiewaarde (weinig onzekerheid voor het model) te filteren.
+
+\subsection{Monte Carlo Dropout Integratie}
+Om de onzekerheid van het model ten opzichte van individuele afbeeldingen te kwantificeren, zal Monte Carlo (MC) Dropout worden toegepast. Door dropout aan te laten staan tijdens de inference-fase, kan het netwerk voor één enkele afbeelding meerdere voorspellingen genereren. De variantie of entropie over deze voorspellingen fungeert als de onzekerheidsscore.
+
+\subsection{Het Filteringsproces}
+Zodra de onzekerheidsscores berekend zijn, zullen de datasets worden gesorteerd. De datapunten met de laagste onzekerheid worden iteratief verwijderd. Dit zal resulteren in drie nieuwe subsets per dataset:
+\begin{itemize}
+    \item Een subset behoudt 75\% van de meest 'onzekere' data.
+    \item Een subset behoudt 50\% van de data.
+    \item Een subset behoudt slechts 25\% van de data.
+\end{itemize}
+
+
+\section{Validatie en Resultaten}
+\label{sec:validatie}
+In deze laatste fase zullen de gereduceerde datasets systematisch worden vergeleken met zowel de baseline (100\% data) als met willekeurig gereduceerde subsets (Random Selection) om te bewijzen dat 'Smart Selection' superieur is.
+
+\subsection{Modelperformantie per Architectuur}
+[PLACEHOLDER: In deze subsectie zullen de uiteindelijke testresultaten worden gepresenteerd. Verwacht wordt dat hier visualisaties zoals verwarringsmatrices en lijngrafieken (Macro F1-score versus datasetgrootte) worden toegevoegd om de performantie-afname tussen Smart Selection en Random Selection te vergelijken, voor alle drie de modelarchitecturen.]
+
+\subsection{Ecologische Impact en Energiebesparing}
+[PLACEHOLDER: Hier zal een gedetailleerde analyse volgen van de CodeCarbon data. Door de trainingstijd en het energieverbruik van de 100\% baseline te vergelijken met de 75\%, 50\% en 25\% subsets, zal de procentuele daling in ecologische voetafdruk in kaart worden gebracht.]
+
+\subsection{Conclusie van de Experimenten}
+[PLACEHOLDER: Een samenvattende synthese waarin wordt gezocht naar de 'sweet spot': het punt waarop de dataset maximaal is gereduceerd (en er dus maximale energie is bespaard) zonder significante opoffering van de modelaccuratesse en Macro F1-score.]
